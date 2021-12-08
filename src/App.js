@@ -1,25 +1,39 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+// import Navbar from './components/Navbar';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const { isAuthenticated, loginWithRedirect, user } = useAuth0();
+	let routes = (
+		<Routes>
+			<Route
+				path='/createITO'
+				element={
+					<h1>Create ITO</h1> /* Add Create ITO component here */
+				}
+			/>
+			<Route
+				path='/holdings'
+				element={<h1>Holdngs</h1> /* Add Holdings component here */}
+			/>
+			<Route
+				path='/dashboard'
+				element={<h1>Dashboard</h1> /* Add Dashboard component here */}
+			/>
+		</Routes>
+	);
+	return (
+		<>
+			{routes}
+			{!isAuthenticated ? (
+				<button onClick={() => loginWithRedirect()}>Login</button>
+			) : (
+				JSON.stringify(user)
+			)}
+		</>
+	);
 }
 
 export default App;
