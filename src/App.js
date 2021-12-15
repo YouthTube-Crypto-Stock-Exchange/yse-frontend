@@ -3,6 +3,7 @@ import './App.css';
 // import Navbar from './components/Navbar';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Route, Routes } from 'react-router-dom';
+import Dashboard from './components/Dashboard';
 
 function App() {
 	const { isAuthenticated, loginWithRedirect, user } = useAuth0();
@@ -20,7 +21,7 @@ function App() {
 			/>
 			<Route
 				path='/dashboard'
-				element={<h1>Dashboard</h1> /* Add Dashboard component here */}
+				element={<Dashboard /> /* Add Dashboard component here */}
 			/>
 		</Routes>
 	);
