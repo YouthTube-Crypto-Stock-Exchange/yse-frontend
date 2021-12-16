@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Piechart from './Piechart';
-import Linechart from './Linechart';
+import Piechart from '../Piechart/Piechart';
+import Linechart from '../Linechart/Linechart';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 
 const Dashboard = () => {
