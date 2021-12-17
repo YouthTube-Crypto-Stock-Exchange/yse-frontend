@@ -3,19 +3,28 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { createBrowserHistory } from 'history';
+
+export const history = createBrowserHistory();
+
+const onRedirectCallback = appState => {
+	// Use the router's history module to replace the url
+	history.replace(appState?.returnTo || window.location.pathname);
+};
 
 ReactDOM.render(
 	<React.StrictMode>
-		<BrowserRouter>
+		<Router history={history}>
 			<Auth0Provider
 				domain={process.env.REACT_APP_AUTH0_DOMAIN}
 				clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
-				redirectUri={window.location.origin + '/dashboard'}>
+				redirectUri={window.location.origin + '/dashboard'}
+				onRedirectCallback={onRedirectCallback}>
 				<App />
 			</Auth0Provider>
-		</BrowserRouter>
+		</Router>
 	</React.StrictMode>,
 	document.getElementById('root')
 );

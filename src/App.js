@@ -1,48 +1,28 @@
 import React from 'react';
 import './App.css';
-import { useAuth0 } from '@auth0/auth0-react';
-import { Route, Routes } from 'react-router-dom';
-import Dashboard from './components/Dashboard';
-import { Nav, Navbar, Container } from 'react-bootstrap';
-import Holdings from './components/Holdings';
+import { Switch } from 'react-router-dom';
+import Dashboard from './components/Dashboard/Dashboard';
+import Navbar from './components/Navbar/Navbar';
+import Holdings from './components/Holdings/Holdings';
+import ProtectedRoute from './components/auth/protected-route';
 
 function App() {
-	const { isAuthenticated, loginWithRedirect, user } = useAuth0();
 	let routes = (
-		<Routes>
-			<Route
+		<Switch>
+			<ProtectedRoute
 				path='/createITO'
-				element={
+				component={
 					<h1>Create ITO</h1> /* Add Create ITO component here */
 				}
 			/>
-			<Route path='/holdings' element={<Holdings />} />
-			<Route
-				path='/dashboard'
-				element={<Dashboard /> /* Add Dashboard component here */}
-			/>
-		</Routes>
+			<ProtectedRoute path='/holdings' component={Holdings} />
+			<ProtectedRoute path='/dashboard' component={Dashboard} />
+		</Switch>
 	);
 	return (
 		<>
-			<Navbar bg='dark' variant='dark'>
-				<Container>
-					<Navbar.Brand href='#home'>
-						YOUTHtube Stock Exchange
-					</Navbar.Brand>
-					<Nav className='me-auto'>
-						<Nav.Link href='holdings'>Holdings</Nav.Link>
-						<Nav.Link href='dashboard'>Dashboard</Nav.Link>
-						<Nav.Link href='createITO'>ITO</Nav.Link>
-					</Nav>
-				</Container>
-			</Navbar>
+			<Navbar />
 			{routes}
-			{!isAuthenticated ? (
-				<button onClick={() => loginWithRedirect()}>Login</button>
-			) : (
-				JSON.stringify(user)
-			)}
 		</>
 	);
 }

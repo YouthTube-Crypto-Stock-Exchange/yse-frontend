@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Piechart from '../Piechart/Piechart';
 import Linechart from '../Linechart/Linechart';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
+import Spinner from '../Spinner/Spinner';
 
 const Dashboard = () => {
 	const [data, setData] = useState([]);
@@ -36,6 +37,4 @@ const Dashboard = () => {
 	);
 };
 
-export default withAuthenticationRequired(Dashboard, {
-	onRedirecting: () => <h1>Redirecting you to login page...</h1>,
-});
+export default Dashboard;
