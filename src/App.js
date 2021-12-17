@@ -1,11 +1,13 @@
-import React from 'react';
+import React , { useState } from 'react';
 import './App.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Route, Routes } from 'react-router-dom';
-import { Nav , Navbar , Container } from 'react-bootstrap';
 import Holdings from './components/Holdings';
+import NavBar from './components/NavBar';
+import Trade from './components/Trade';
 
 function App() {
+    const [searchValue, setSearchValue] = useState("");
 	const { isAuthenticated, loginWithRedirect, user } = useAuth0();
 	let routes = (
 		<Routes>
@@ -20,23 +22,22 @@ function App() {
 				element = {<Holdings />}
 			/>
 			<Route
+				path='/trade'
+				element={<Trade
+                    searchValue={searchValue}
+                />}
+			/>
+			<Route
 				path='/dashboard'
-				element={<h1>Dashboard</h1> /* Add Holdings component here */}
+				element={<h1>Dashboard</h1> }
 			/>
 		</Routes>
 	);
 	return (
 		<>
-            <Navbar bg="dark" variant="dark">
-                <Container>
-                    <Navbar.Brand href="#home">YOUTHtube Stock Exchange</Navbar.Brand>
-                    <Nav className="me-auto">
-                        <Nav.Link href="holdings">Holdings</Nav.Link>
-                        <Nav.Link href="dashboard">Dashboard</Nav.Link>
-                        <Nav.Link href="createITO">ITO</Nav.Link>
-                    </Nav>
-                </Container>
-            </Navbar>
+            <NavBar
+                setValue={setSearchValue}
+            />
 			{routes}
 			{!isAuthenticated ? (
 				<button onClick={() => loginWithRedirect()}>Login</button>
