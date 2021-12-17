@@ -1,13 +1,29 @@
-import React from 'react';
-import { Nav, Navbar, Container } from 'react-bootstrap';
+import React, { useState } from 'react';
+import {
+	FormControl,
+	Form,
+	Button,
+	Navbar,
+	Nav,
+	Container,
+} from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const NavbarComp = props => {
+function NavBar() {
+	const [inputValue, setInputValue] = useState('');
 	const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+	let history = useHistory();
+
+	const handleSubmit = e => {
+		e.preventDefault();
+		history.push(`/trade?search=${inputValue}`);
+		setInputValue('');
+	};
 	return (
 		<Navbar bg='dark' variant='dark'>
 			<Container>
-				<Navbar.Brand href='dashboard'>
+				<Navbar.Brand href={isAuthenticated ? 'dashboard' : '/'}>
 					YOUTHtube Stock Exchange
 				</Navbar.Brand>
 				<Nav className='me-auto'>
@@ -31,9 +47,25 @@ const NavbarComp = props => {
 						</>
 					)}
 				</Nav>
+				{isAuthenticated ? (
+					<Form className='d-flex'>
+						<FormControl
+							type='search'
+							placeholder='Search'
+							className='me-2'
+							aria-label='Search'
+							value={inputValue}
+							onChange={e => {
+								setInputValue(e.target.value);
+							}}
+						/>
+						<Button variant='outline-light' onClick={handleSubmit}>
+							Search
+						</Button>
+					</Form>
+				) : null}
 			</Container>
 		</Navbar>
 	);
-};
-
-export default NavbarComp;
+}
+export default NavBar;

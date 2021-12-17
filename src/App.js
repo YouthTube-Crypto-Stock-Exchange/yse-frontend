@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import { Route, Switch } from 'react-router-dom';
+import { Switch, useHistory } from 'react-router-dom';
 import Dashboard from './components/Dashboard/Dashboard';
 import Holdings from './components/Holdings/Holdings';
 import ProtectedRoute from './components/auth/protected-route';
-import NavBar from './components/NavBar';
-import Trade from './components/Trade';
+import NavBar from './components/Navbar/NavBar';
+import Trade from './components/Trade/Trade';
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
+import Spinner from './components/Spinner/Spinner';
 
 function App() {
-	const [searchValue, setSearchValue] = useState('');
+	const { isAuthenticated } = useAuth0();
+	const history = useHistory();
 	let routes = (
 		<Switch>
 			<ProtectedRoute
@@ -19,17 +22,24 @@ function App() {
 			/>
 			<ProtectedRoute path='/holdings' component={Holdings} />
 			<ProtectedRoute path='/dashboard' component={Dashboard} />
-			<Route path='/trade'>
-				<Trade searchValue={searchValue} />
-			</Route>
+			<ProtectedRoute path='/trade' component={Trade} />
 		</Switch>
 	);
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			history.replace('/dashboard');
+		}
+	}, [isAuthenticated, history]);
+
 	return (
 		<>
-			<NavBar setValue={setSearchValue} />
+			<NavBar />
 			{routes}
 		</>
 	);
 }
 
-export default App;
+export default withAuthenticationRequired(App, {
+	onRedirecting: () => <Spinner />,
+});

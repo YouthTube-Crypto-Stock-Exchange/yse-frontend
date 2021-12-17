@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Piechart from '../Piechart/Piechart';
-import Linechart from '../Linechart/Linechart';
-import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
-import Spinner from '../Spinner/Spinner';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Dashboard = () => {
 	const [data, setData] = useState([]);
-	const { user, isAuthenticated } = useAuth0(); // use user property to make api calls to backend
+	const { user } = useAuth0(); // use user property to make api calls to backend
 
 	useEffect(() => {
 		regenerateData();
@@ -32,7 +30,6 @@ const Dashboard = () => {
 				<p style={{ color: 'green' }}>Dynamic Value</p>
 			</p>
 			<Piechart data={data} />
-			{/* <Linechart /> */}
 		</>
 	);
 };

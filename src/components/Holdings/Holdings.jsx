@@ -1,14 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Card, Table } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
-import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
-import Spinner from '../Spinner/Spinner';
+import { useAuth0 } from '@auth0/auth0-react';
 
 function Holdings(props) {
 	const [holdings, setHoldings] = useState([]);
 	const [ether, setEther] = useState(0);
 	const [youthTokens, setYouthTokens] = useState(0);
-	// const { user } = useAuth0(); use this user to access backend
+	const { user } = useAuth0(); // use this user to access backend
 
 	useEffect(() => {
 		fetch('http://localhost:4000/getHoldings/1')
