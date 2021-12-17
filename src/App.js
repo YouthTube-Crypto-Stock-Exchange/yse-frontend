@@ -9,7 +9,7 @@ import NavBar from './components/Navbar/NavBar';
 import Trade from './components/Trade/Trade';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import Spinner from './components/Spinner/Spinner';
-import Orders from './components/Orders';
+import Orders from './components/Orders/Orders';
 
 function App() {
 	const { isAuthenticated } = useAuth0();
@@ -31,7 +31,11 @@ function App() {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			history.replace('/dashboard');
+			history.replace(
+				history.location.pathname === '/'
+					? 'dashboard'
+					: history.location.pathname
+			);
 		}
 	}, [isAuthenticated, history]);
 

@@ -11,14 +11,14 @@ import { useHistory } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 
 function NavBar() {
-	const [inputValue, setInputValue] = useState('');
+	const [channelName, setChannelName] = useState('');
 	const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
 	let history = useHistory();
 
 	const handleSubmit = e => {
 		e.preventDefault();
-		history.push(`/trade?search=${inputValue}`);
-		setInputValue('');
+		history.push(`/trade?search=${channelName}`);
+		setChannelName('');
 	};
 	return (
 		<Navbar bg='dark' variant='dark'>
@@ -36,6 +36,7 @@ function NavBar() {
 							<Nav.Link href='dashboard'>Dashboard</Nav.Link>
 							<Nav.Link href='holdings'>Holdings</Nav.Link>
 							<Nav.Link href='createITO'>ITO</Nav.Link>
+							<Nav.Link href='orders'>Orders</Nav.Link>
 							<Nav.Link
 								onClick={() =>
 									logout({
@@ -48,18 +49,18 @@ function NavBar() {
 					)}
 				</Nav>
 				{isAuthenticated ? (
-					<Form className='d-flex'>
+					<Form className='d-flex' onSubmit={handleSubmit}>
 						<FormControl
 							type='search'
 							placeholder='Search'
 							className='me-2'
 							aria-label='Search'
-							value={inputValue}
+							value={channelName}
 							onChange={e => {
-								setInputValue(e.target.value);
+								setChannelName(e.target.value);
 							}}
 						/>
-						<Button variant='outline-light' onClick={handleSubmit}>
+						<Button variant='outline-light' type='submit'>
 							Search
 						</Button>
 					</Form>

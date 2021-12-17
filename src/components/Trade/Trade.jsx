@@ -9,7 +9,7 @@ const Trade = props => {
 	);
 	const { user } = useAuth0();
 	useEffect(() => {
-		console.log(searchValue);
+		console.log(user);
 		// let path = 'http://localhost:4000/doesChannelExist/' + searchValue;
 		// fetch(path)
 		// 	.then(response => response.json())
