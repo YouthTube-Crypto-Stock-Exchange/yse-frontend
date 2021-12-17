@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
-import { Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Dashboard from './components/Dashboard/Dashboard';
-import Navbar from './components/Navbar/Navbar';
 import Holdings from './components/Holdings/Holdings';
 import ProtectedRoute from './components/auth/protected-route';
+import NavBar from './components/NavBar';
+import Trade from './components/Trade';
 
 function App() {
+	const [searchValue, setSearchValue] = useState('');
 	let routes = (
 		<Switch>
 			<ProtectedRoute
@@ -17,11 +19,14 @@ function App() {
 			/>
 			<ProtectedRoute path='/holdings' component={Holdings} />
 			<ProtectedRoute path='/dashboard' component={Dashboard} />
+			<Route path='/trade'>
+				<Trade searchValue={searchValue} />
+			</Route>
 		</Switch>
 	);
 	return (
 		<>
-			<Navbar />
+			<NavBar setValue={setSearchValue} />
 			{routes}
 		</>
 	);
