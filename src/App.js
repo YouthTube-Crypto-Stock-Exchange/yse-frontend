@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect } from 'react';
 import './App.css';
 import { Switch, useHistory } from 'react-router-dom';
@@ -8,6 +9,7 @@ import NavBar from './components/Navbar/NavBar';
 import Trade from './components/Trade/Trade';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import Spinner from './components/Spinner/Spinner';
+import Orders from './components/Orders';
 
 function App() {
 	const { isAuthenticated } = useAuth0();
@@ -23,6 +25,7 @@ function App() {
 			<ProtectedRoute path='/holdings' component={Holdings} />
 			<ProtectedRoute path='/dashboard' component={Dashboard} />
 			<ProtectedRoute path='/trade' component={Trade} />
+			<ProtectedRoute path='/orders' component={Orders} />
 		</Switch>
 	);
 
