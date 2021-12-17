@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row , Col , Card, Table } from 'react-bootstrap';
 import React, { useEffect , useState } from 'react';
 

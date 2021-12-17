@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { FormControl , Form , Button , Navbar , Nav , Container } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 
 function NavBar({ setValue }){
-    const [ inputValue , setInputValue ] = useState("");
-    let navigate = useNavigate();
+    const [ channelName , setChannelName ] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate('/trade');
-        setValue(inputValue);
-        setInputValue("");
+        console.log("value submitted");
+        setValue(channelName);
+        setChannelName("");
     };
     return (
         <Navbar bg="dark" variant="dark">
@@ -20,6 +18,7 @@ function NavBar({ setValue }){
                     <Nav.Link href="holdings">Holdings</Nav.Link>
                     <Nav.Link href="dashboard">Dashboard</Nav.Link>
                     <Nav.Link href="createITO">ITO</Nav.Link>
+                    <Nav.Link href="orders">Orders</Nav.Link>
                 </Nav>
                 <Form
                     className="d-flex"
@@ -29,9 +28,9 @@ function NavBar({ setValue }){
                         placeholder="Search"
                         className="me-2"
                         aria-label="Search"
-                        value={inputValue}
+                        value={channelName}
                         onChange={(e)=>{
-                            setInputValue(e.target.value);
+                            setChannelName(e.target.value);
                         }}
                     />
                     <Button

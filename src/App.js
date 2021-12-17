@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React , { useState } from 'react';
 import './App.css';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -5,6 +6,7 @@ import { Route, Routes } from 'react-router-dom';
 import Holdings from './components/Holdings';
 import NavBar from './components/NavBar';
 import Trade from './components/Trade';
+import Orders from './components/Orders';
 
 function App() {
     const [searchValue, setSearchValue] = useState("");
@@ -26,6 +28,10 @@ function App() {
 				element={<Trade
                     searchValue={searchValue}
                 />}
+			/>
+			<Route
+				path='/orders'
+				element={<Orders />}
 			/>
 			<Route
 				path='/dashboard'
