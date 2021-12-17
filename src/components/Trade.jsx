@@ -4,12 +4,14 @@ function Trade({ searchValue }){
     const [pageFound,setPageFound] = useState(false);
 
     useEffect( ()=>{
+        console.log("request sent");
+        console.log(searchValue);
         let path= 'http://localhost:4000/doesChannelExist/'+searchValue;
+        console.log(path);
         fetch(path)
             .then(response => response.json())
             .then(data => {
                 if(data.channelFound) setPageFound(true);
-                else setPageFound(false);
             });
     },[searchValue])
     return ( <>
