@@ -1,14 +1,25 @@
-import { Container, Row, Col, Card, Table, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Table } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
-function Orders(props) {
+function Orders() {
 	const [orders, setOrders] = useState([]);
+	const [isError, setIsError] = useState(false);
+	const { user } = useAuth0();
 
 	useEffect(() => {
-		// fetch('http://localhost:4000/getOrders/1')
-		//     .then(response => response.json())
-		//     .then(data => setOrders(data));
-	}, []);
+		fetch(`http://localhost:8080/orders/${user.sub}`)
+		    .then(response => response.json())
+		    .then(data => setOrders(data.orders))
+			.catch(err => {
+				console.log(err);
+				setIsError(true);
+			});
+	}, [user.sub]);
+
+	if(isError) {
+		return <p>Some error occurred please try again later</p>
+	}
 
 	return (
 		<div className='min-h-100'>
@@ -29,9 +40,6 @@ function Orders(props) {
 												Total Paid
 											</th>
 											<th className='col-1'>Buy/Sell</th>
-											<th className='col-1'>
-												Bid/Aggressive
-											</th>
 											<th className='col-1'>
 												Order Status
 											</th>
@@ -56,18 +64,17 @@ function Orders(props) {
 											}
 											return (
 												<tr>
-													<td>{order.channel}</td>
-													<td>{order.volume}</td>
+													<td>{order.influencerName}</td>
+													<td>{order.quantity}</td>
 													<td>{order.price}</td>
-													<td>{order.bs}</td>
-													<td>{order.ba}</td>
+													<td>{order.type}</td>
 													<td>
 														<Card
 															bg={bgColor}
 															text={textColor}>
 															<Card.Header>
 																{
-																	order.orderStatus
+																	order.status
 																}
 															</Card.Header>
 														</Card>
