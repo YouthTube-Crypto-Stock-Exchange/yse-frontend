@@ -9,37 +9,68 @@ const Ito = () => {
     const [ shareCount , setShareCount ] = useState();
     const [ sharePrice , setSharePrice ] = useState();
     const [ isLoading , setIsLoading ] = useState(false);
-    const [ isInfluencer , setIsInfluencer ] = useState(false);
+    const [ isError , setIsError ] = useState(false);
+    const [ message , setMessage] = useState('');
     const { user } = useAuth0();
 
     useEffect( () => {
         console.log(user.sub);
+        setIsLoading(true);
+        setMessage('Fetching user details...');
 		fetch(`http://localhost:8080/getUserDetails/${user.sub}`)
 			.then(response => response.json())
 			.then(async data => {
                 console.log(data);
                 if(data.user.isInfluencer){
-                    console.log("user is already an influencer");
-                    setIsInfluencer(true);
+                    setIsLoading(false);
+                    setIsError(true);
+                    setMessage("User is already an influencer");
                 }
-			})
+                setIsLoading(false);
+			}).catch( err => {
+                console.log(err);
+                setIsLoading(false);
+                setIsError(true);
+                setMessage('User details could not be fetched');
+            })
     },[])
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-        if(!isInfluencer){
-            console.log('creating ITO');
+        try{
+            setIsLoading(true);
+            setMessage('Creating ITO...')
             const accounts = await web3.eth.getAccounts();
             await contract.methods
                 .ITO(shareCount, sharePrice, user.name)
                 .send({
                     from: accounts[0],
                 });
-            console.log('ITO created');
+            setIsLoading(false);
+            setIsError(true);
+            setMessage('ITO has been Created');
+        }catch(err){
+            console.log(err);
+            setIsLoading(false);
+            setIsError(true);
+            setMessage('Error in creating ITO , Try again :(');
         }
 		setSharePrice('');
 		setShareCount('');
 	};
+
+	if (isLoading) {
+		return (
+			<>
+				<Spinner />
+				<p>{message}</p>
+			</>
+		);
+	}
+
+	if (isError) {
+		return <p>{message}</p>;
+	}
 
     return(
     <>
