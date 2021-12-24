@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { withRouter } from 'react-router';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Container, Row, Col, Table, Button, Modal, Card , Form , InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Table, Button, Modal, Card , Form , InputGroup, Alert } from 'react-bootstrap';
 import Linechart from '../Linechart/Linechart';
 
 const buy = "Buy Shares";
@@ -17,6 +17,8 @@ const Trade = props => {
     const [ shareCount , setShareCount ] = useState();
     const [ sharePrice , setSharePrice ] = useState();
     const [ bidType , setBidType ] = useState(normal);
+
+    const [ formErrors , setFormErrors ] = useState({});
 
 	const searchValue = new URLSearchParams(props.location.search).get(
 		'search'
@@ -35,6 +37,21 @@ const Trade = props => {
 			});
 	}, [searchValue]);
 
+    const findFormErrors = () => {
+        const newErrors = {};
+        if( !sharePrice || (bidType===normal && sharePrice<0) ) newErrors.sharePrice = 'Pice per share is a required field and should contain a positive value'
+        if( !shareCount || shareCount<0 ) newErrors.shareCount = 'Number of shares is a required field and should contain a positive value'
+        return newErrors;
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log('running handleSubmit');
+        setFormErrors(findFormErrors());
+        if(Object.keys(formErrors).length==0){
+            console.log("form is valid!!!");
+        }
+    }
 	return (
 		<>
 			{pageFound ? (
@@ -100,15 +117,19 @@ const Trade = props => {
                                     <h2><strong>{ action }</strong></h2>
                                 </Card.Header>
                                 <Card.Body className='px-5'>
-                                    <Form>
+                                    <Form onSubmit={handleSubmit}>
                                         <Form.Group className="mb-3">
                                             <Form.Label><strong>Number of Shares</strong></Form.Label>
                                             <Form.Control
-                                                type="text"
+                                                type="number"
                                                 placeholder="Enter the Number of Shares"
                                                 value={shareCount}
                                                 onChange={(event) => {setShareCount(event.target.value)}}
+                                                isInvalid={!!formErrors.shareCount}
                                             />
+                                            <Form.Control.Feedback type='invalid'>
+                                                { formErrors.shareCount }
+                                            </Form.Control.Feedback>
                                         </Form.Group>
 
                                         <div key={'inline-radio'} className="my-3">
@@ -140,13 +161,17 @@ const Trade = props => {
                                             <Form.Label><strong>Price per share</strong></Form.Label>
                                             <InputGroup>
                                                 <Form.Control
-                                                    type="text"
+                                                    type="number"
                                                     placeholder="Enter Price per share"
                                                     value={(bidType===aggressive)?'':sharePrice}
                                                     onChange={(event) => {setSharePrice(event.target.value)}}
                                                     disabled={(bidType===aggressive)?true:false}
+                                                    isInvalid={!!formErrors.sharePrice}
                                                 />
                                                 <InputGroup.Text id="basic-addon2">Youth Tokens</InputGroup.Text>
+                                                <Form.Control.Feedback type='invalid'>
+                                                    { formErrors.sharePrice }
+                                                </Form.Control.Feedback>
                                             </InputGroup>
                                         </Form.Group>
                                         <div className='d-flex flex-column align-items-center'>
@@ -161,7 +186,11 @@ const Trade = props => {
 					</Row>
 				</Container>
 			) : (
-				<h2>Channel doesn't exists Please Try again</h2>
+                <Container className='mt-5'>
+                <Alert variant='danger'>
+                    Channel doesn't exists Please Try again
+                </Alert>
+                </Container>
 			)}
 		</>
 	);
