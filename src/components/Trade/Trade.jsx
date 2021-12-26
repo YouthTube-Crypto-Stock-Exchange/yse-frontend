@@ -26,7 +26,6 @@ const Trade = props => {
 	const { user } = useAuth0();
 
 	useEffect(() => {
-		console.log(user);
         let path = 'http://localhost:8080/getInfluencerDetails/' + searchValue;
 		fetch(path)
 			.then(response => response.json())
@@ -39,17 +38,25 @@ const Trade = props => {
 
     const findFormErrors = () => {
         const newErrors = {};
-        if( !sharePrice || (bidType===normal && sharePrice<0) ) newErrors.sharePrice = 'Pice per share is a required field and should contain a positive value'
-        if( !shareCount || shareCount<0 ) newErrors.shareCount = 'Number of shares is a required field and should contain a positive value'
+        if( !sharePrice || typeof(sharePrice)==='string' || (bidType===normal && sharePrice<0) || !Number.isInteger(sharePrice)){
+            newErrors.sharePrice = 'Pice per share is a required field and should contain a positive value'
+        }
+        if( !shareCount || typeof(shareCount)==='string' || shareCount<0 || !Number.isInteger(shareCount)){
+            newErrors.shareCount = 'Number of shares is a required field and should contain a positive value'
+        }
         return newErrors;
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('running handleSubmit');
-        setFormErrors(findFormErrors());
-        if(Object.keys(formErrors).length==0){
-            console.log("form is valid!!!");
+        let newErrors = findFormErrors();
+        setFormErrors(newErrors);
+        if(Object.keys(newErrors).length==0){
+            if(action===buy){
+                console.log('user is about to buy some shares');
+            }else{
+                console.log('user is about to sell some shares');
+            }
         }
     }
 	return (
@@ -124,7 +131,7 @@ const Trade = props => {
                                                 type="number"
                                                 placeholder="Enter the Number of Shares"
                                                 value={shareCount}
-                                                onChange={(event) => {setShareCount(event.target.value)}}
+                                                onChange={(event) => {setShareCount(parseInt(event.target.value))}}
                                                 isInvalid={!!formErrors.shareCount}
                                             />
                                             <Form.Control.Feedback type='invalid'>
@@ -164,7 +171,7 @@ const Trade = props => {
                                                     type="number"
                                                     placeholder="Enter Price per share"
                                                     value={(bidType===aggressive)?'':sharePrice}
-                                                    onChange={(event) => {setSharePrice(event.target.value)}}
+                                                    onChange={(event) => {setSharePrice(parseInt(event.target.value))}}
                                                     disabled={(bidType===aggressive)?true:false}
                                                     isInvalid={!!formErrors.sharePrice}
                                                 />

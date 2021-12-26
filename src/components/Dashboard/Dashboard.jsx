@@ -4,7 +4,7 @@ import contract from '../../contract';
 import web3 from '../../web3';
 import Piechart from '../Piechart/Piechart';
 import Spinner from '../Spinner/Spinner';
-import { Container, Row, Col, Card} from 'react-bootstrap';
+import { Container, Row, Col, Card , Alert } from 'react-bootstrap';
 
 const Dashboard = () => {
 	const [data, setData] = useState([]);
@@ -62,13 +62,23 @@ const Dashboard = () => {
 		return (
 			<>
 				<Spinner />
-				<p>{message}</p>
+                <Container className='mt-5'>
+                <Alert variant='warning'>
+                    <p>{message}</p>
+                </Alert>
+                </Container>
 			</>
 		);
 	}
 
 	if (isError) {
-		return <p>{message}</p>;
+		return <>
+            <Container className='mt-5'>
+            <Alert variant='danger'>
+                <p>{message}</p>
+            </Alert>
+            </Container>
+        </>
 	}
 
 	return (
