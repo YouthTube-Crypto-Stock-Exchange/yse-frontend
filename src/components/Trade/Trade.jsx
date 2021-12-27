@@ -83,8 +83,23 @@ const Trade = props => {
                         headers: {"Content-type": "application/json; charset=UTF-8"}
                     })
                     .then(response => response.json()) 
-                    .then(json => console.log(json))
-                    .catch(err => console.log(err));
+                    .then(json => {
+                        if(json.msg==='done'){
+                            setIsError(true);
+                            setMessage('Request made successfully, You can look at the status of the request in the Orders section');
+                            setAlertVariant(success);
+                        }else{
+                            setIsError(true);
+                            setMessage(json.msg);
+                            setAlertVariant(danger);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        setIsError(true);
+                        setMessage('Some error occurred when communicating to the server, Please try again later');
+                        setAlertVariant(danger);
+                    });
             }else if(action===sell){
                 let data = {
                     "influencerId":influencer.id,
@@ -99,8 +114,23 @@ const Trade = props => {
                         headers: {"Content-type": "application/json; charset=UTF-8"}
                     })
                     .then(response => response.json()) 
-                    .then(json => console.log(json))
-                    .catch(err => console.log(err));
+                    .then(json => {
+                        if(json.msg==='done'){
+                            setIsError(true);
+                            setMessage('Request made successfully, You can look at the status of the request in the Orders section');
+                            setAlertVariant(success);
+                        }else{
+                            setIsError(true);
+                            setMessage(json.msg);
+                            setAlertVariant(danger);
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        setIsError(true);
+                        setMessage('Some error occurred when communicating to the server, Please try again later');
+                        setAlertVariant(danger);
+                    });
             }
         }
     }
