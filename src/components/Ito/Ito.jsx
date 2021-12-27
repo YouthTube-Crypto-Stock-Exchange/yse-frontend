@@ -21,14 +21,12 @@ const Ito = () => {
     const { user } = useAuth0();
 
     useEffect( () => {
-        console.log(user.sub);
         setIsLoading(true);
         setAlertVariant(warning);
         setMessage('Fetching user details...');
 		fetch(`http://localhost:8080/getUserDetails/${user.sub}`)
 			.then(response => response.json())
 			.then(async data => {
-                console.log(data);
                 if(data.user.isInfluencer){
                     setIsLoading(false);
                     setIsError(true);
@@ -67,7 +65,7 @@ const Ito = () => {
                 setAlertVariant(warning);
                 const accounts = await web3.eth.getAccounts();
                 await contract.methods
-                    .ITO(shareCount, sharePrice, user.name)
+                    .ITO(shareCount, sharePrice, user.sub)
                     .send({
                         from: accounts[0],
                     });
@@ -75,8 +73,6 @@ const Ito = () => {
                 setIsError(true);
                 setAlertVariant(success);
                 setMessage('ITO has been Created');
-                console.log(sharePrice);
-                console.log(shareCount);
                 setSharePrice('');
                 setShareCount('');
             }catch(err){
