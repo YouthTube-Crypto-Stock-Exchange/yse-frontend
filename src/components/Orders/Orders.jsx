@@ -8,9 +8,8 @@ function Orders() {
 	const [isError, setIsError] = useState(false);
 	const { user } = useAuth0();
 
-	useEffect(async() => {
-        const accounts = await web3.eth.getAccounts();
-		fetch(`http://localhost:8080/orders/${accounts[0]}`)
+	useEffect(() => {
+		fetch(`http://localhost:8080/orders/${user.sub}`)
 		    .then(response => response.json())
 		    .then(data => setOrders(data.orders))
 			.catch(err => {
@@ -52,11 +51,11 @@ function Orders() {
 											let bgColor = '';
 											let textColor = 'white';
 											if (
-												order.orderStatus === 'complete'
+												order.status === "Completed"
 											) {
 												bgColor += 'success';
 											} else if (
-												order.orderStatus === 'failed'
+												order.status === 'failed'
 											) {
 												bgColor += 'danger';
 											} else {

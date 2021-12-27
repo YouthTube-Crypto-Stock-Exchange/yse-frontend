@@ -13,7 +13,7 @@ const Trade = props => {
 	const [pageFound, setPageFound] = useState(true);
 	const [influencer, setInfluencer] = useState({});
 
-    const [ action , setAction ] = useState(buy);
+    const [ action , setAction ] = useState('');
     const [ shareCount , setShareCount ] = useState();
     const [ sharePrice , setSharePrice ] = useState();
     const [ bidType , setBidType ] = useState(normal);
@@ -30,9 +30,11 @@ const Trade = props => {
 		fetch(path)
 			.then(response => response.json())
 			.then(data => {
-                console.log(data);
 				if (data.msg==='Influencer Not Found') setPageFound(false);
-				else setPageFound(true);
+				else{
+                    setPageFound(true);
+                    setInfluencer(data.influencer);
+                }
 			});
 	}, [searchValue]);
 
@@ -53,9 +55,35 @@ const Trade = props => {
         setFormErrors(newErrors);
         if(Object.keys(newErrors).length==0){
             if(action===buy){
-                console.log('user is about to buy some shares');
-            }else{
-                console.log('user is about to sell some shares');
+                let data = {
+                    "influencerId":influencer.id,
+                    "influencerName":influencer.name,
+                    "maxBuyPrice":sharePrice,
+                    "numShares":shareCount,
+                    "userId":user.sub,
+                };
+                fetch('http://localhost:8080/buyShares', { method: "POST", body: JSON.stringify(data),
+                        headers: {"Content-type": "application/json; charset=UTF-8"}
+                    })
+                    .then(response => response.json()) 
+                    .then(json => console.log(json))
+                    .catch(err => console.log(err));
+            }else if(action===sell){
+                let data = {
+                    "influencerId":influencer.id,
+                    "influencerName":influencer.name,
+                    "minSellPrice":sharePrice,
+                    "numShares":shareCount,
+                    "userId":user.sub,
+                };
+                fetch('http://localhost:8080/sellShares', {
+                        method: "POST",
+                        body: JSON.stringify(data),
+                        headers: {"Content-type": "application/json; charset=UTF-8"}
+                    })
+                    .then(response => response.json()) 
+                    .then(json => console.log(json))
+                    .catch(err => console.log(err));
             }
         }
     }
