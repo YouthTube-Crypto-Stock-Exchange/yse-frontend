@@ -1,14 +1,16 @@
 import { Container, Row, Col, Card, Table } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import web3 from '../../web3';
 
 function Orders() {
 	const [orders, setOrders] = useState([]);
 	const [isError, setIsError] = useState(false);
 	const { user } = useAuth0();
 
-	useEffect(() => {
-		fetch(`http://localhost:8080/orders/${user.sub}`)
+	useEffect(async() => {
+        const accounts = await web3.eth.getAccounts();
+		fetch(`http://localhost:8080/orders/${accounts[0]}`)
 		    .then(response => response.json())
 		    .then(data => setOrders(data.orders))
 			.catch(err => {
@@ -47,7 +49,6 @@ function Orders() {
 									</thead>
 									<tbody>
 										{orders.map(order => {
-											console.log(order);
 											let bgColor = '';
 											let textColor = 'white';
 											if (
