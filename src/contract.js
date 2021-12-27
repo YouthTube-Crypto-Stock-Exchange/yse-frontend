@@ -205,7 +205,7 @@ const abi = [
 			},
 			{
 				internalType: 'string',
-				name: '_name',
+				name: '_id',
 				type: 'string',
 			},
 		],
@@ -356,7 +356,7 @@ const abi = [
 		inputs: [
 			{
 				internalType: 'string',
-				name: 'buyer',
+				name: 'buyerId',
 				type: 'string',
 			},
 			{
@@ -454,11 +454,6 @@ const abi = [
 			},
 			{
 				internalType: 'uint256',
-				name: 'numShares',
-				type: 'uint256',
-			},
-			{
-				internalType: 'uint256',
 				name: 'newBalance',
 				type: 'uint256',
 			},
@@ -471,6 +466,19 @@ const abi = [
 	{
 		inputs: [],
 		name: 'getContractBalance',
+		outputs: [
+			{
+				internalType: 'uint256',
+				name: '',
+				type: 'uint256',
+			},
+		],
+		stateMutability: 'view',
+		type: 'function',
+	},
+	{
+		inputs: [],
+		name: 'getPriceOfToken',
 		outputs: [
 			{
 				internalType: 'uint256',
@@ -606,7 +614,7 @@ const abi = [
 			},
 			{
 				internalType: 'string',
-				name: 'seller',
+				name: 'sellerId',
 				type: 'string',
 			},
 			{
