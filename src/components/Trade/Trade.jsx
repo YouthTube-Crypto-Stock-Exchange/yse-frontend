@@ -44,6 +44,9 @@ const Trade = props => {
                     setAlertVariant(danger);
                     setMessage(data.msg);
                 }else{
+                    for(let i = 0; i < data.influencer.sharePriceHistory.length; i++) {
+                        data.influencer.sharePriceHistory[i].atDateTime = new Date(data.influencer.sharePriceHistory[i].atDateTime).toLocaleString();
+                    }
                     setInfluencer(data.influencer);
                 }
 			})
@@ -58,7 +61,7 @@ const Trade = props => {
     const findFormErrors = () => {
         const newErrors = {};
         if( !sharePrice || typeof(sharePrice)==='string' || (bidType===normal && sharePrice<0) || !Number.isInteger(sharePrice)){
-            newErrors.sharePrice = 'Pice per share is a required field and should contain a positive value'
+            newErrors.sharePrice = 'Price per share is a required field and should contain a positive value'
         }
         if( !shareCount || typeof(shareCount)==='string' || shareCount<0 || !Number.isInteger(shareCount)){
             newErrors.shareCount = 'Number of shares is a required field and should contain a positive value'
@@ -68,9 +71,9 @@ const Trade = props => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let newErrors = findFormErrors();
+        const newErrors = findFormErrors();
         setFormErrors(newErrors);
-        if(Object.keys(newErrors).length==0){
+        if(Object.keys(newErrors).length===0){
             if(action===buy){
                 let data = {
                     "influencerId":influencer.id,
@@ -153,7 +156,9 @@ const Trade = props => {
                         <h2>Name: {searchValue}</h2>
                     </Card.Title>
                     <Col>
-                        <Linechart />
+                        {influencer.sharePriceHistory !== undefined ? 
+                            <Linechart data={influencer.sharePriceHistory} /> 
+                        : null}
                     </Col>
                     <Col>
                         <Table hover className='text-center'>
@@ -218,6 +223,7 @@ const Trade = props => {
                                             value={shareCount}
                                             onChange={(event) => {setShareCount(parseInt(event.target.value))}}
                                             isInvalid={!!formErrors.shareCount}
+                                            disabled={action.length === 0}
                                         />
                                         <Form.Control.Feedback type='invalid'>
                                             { formErrors.shareCount }
@@ -231,6 +237,7 @@ const Trade = props => {
                                         name="group1"
                                         type="radio"
                                         id='inline-radio-1'
+                                        disabled={action.length === 0}
                                         onClick={() => {
                                             setBidType(normal)
                                             setSharePrice('');
@@ -242,6 +249,7 @@ const Trade = props => {
                                         name="group1"
                                         type="radio"
                                         id='inline-radio-2'
+                                        disabled={action.length === 0}
                                         onClick={() => {
                                             setBidType(aggressive)
                                             setSharePrice(-1);
@@ -257,7 +265,7 @@ const Trade = props => {
                                                 placeholder="Enter Price per share"
                                                 value={(bidType===aggressive)?'':sharePrice}
                                                 onChange={(event) => {setSharePrice(parseInt(event.target.value))}}
-                                                disabled={(bidType===aggressive)?true:false}
+                                                disabled={action.length !== 0 ? bidType===aggressive : true}
                                                 isInvalid={!!formErrors.sharePrice}
                                             />
                                             <InputGroup.Text id="basic-addon2">Youth Tokens</InputGroup.Text>
@@ -267,7 +275,7 @@ const Trade = props => {
                                         </InputGroup>
                                     </Form.Group>
                                     <div className='d-flex flex-column align-items-center'>
-                                    <Button variant="primary" type="submit">
+                                    <Button variant="primary" type="submit" disabled={action.length === 0}>
                                         Submit
                                     </Button>
                                     </div>

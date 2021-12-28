@@ -41,7 +41,7 @@ const Ito = () => {
                 setAlertVariant(danger);
                 setMessage('User details could not be fetched');
             })
-    },[])
+    },[user.sub])
 
     const findFormErrors = () => {
         const newErrors = {};
@@ -58,7 +58,7 @@ const Ito = () => {
 		e.preventDefault();
         let newErrors = findFormErrors();
         setFormErrors(newErrors);
-        if(Object.keys(newErrors).length==0){
+        if(Object.keys(newErrors).length===0){
             try{
                 setIsLoading(true);
                 setMessage('Creating ITO...')

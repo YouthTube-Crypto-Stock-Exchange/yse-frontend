@@ -13,6 +13,7 @@ function Holdings(props) {
 			.then(response => response.json())
 			.then(holdings => {
 				setHoldings(holdings.portfolio);
+				console.log(holdings.portfolio);
 				setYouthTokens(holdings.numYouthTokens);
 			})
 			.catch(err => {
@@ -75,7 +76,7 @@ function Holdings(props) {
 											let textColor = 'text-';
 											let deltaSign;
 											const change = holding.curPrice - holding.priceAtWhichBought;
-											if (change > 0) {
+											if (change >= 0) {
 												textColor += 'success';
 												deltaSign = '+ ';
 											} else {

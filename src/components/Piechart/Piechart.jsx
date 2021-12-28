@@ -12,7 +12,7 @@ const Piechart = props => {
 		<>
 			<PieChart width={400} height={400}>
 				<Pie
-					dataKey='value'
+					dataKey='total'
 					data={data}
 					cx={200}
 					cy={200}

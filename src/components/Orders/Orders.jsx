@@ -1,7 +1,6 @@
 import { Container, Row, Col, Card, Table } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import web3 from '../../web3';
 
 function Orders() {
 	const [orders, setOrders] = useState([]);
