@@ -11,6 +11,7 @@ import Ito from './components/Ito/Ito';
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 import Spinner from './components/Spinner/Spinner';
 import Orders from './components/Orders/Orders';
+import Youthtoken from './components/Youthtoken/Youthtoken';
 
 function App() {
 	const { isAuthenticated } = useAuth0();
@@ -22,6 +23,7 @@ function App() {
 			<ProtectedRoute path='/dashboard' component={Dashboard} />
 			<ProtectedRoute path='/trade' component={Trade} />
 			<ProtectedRoute path='/orders' component={Orders} />
+			<ProtectedRoute path='/youthtoken' component={Youthtoken} />
 		</Switch>
 	);
 

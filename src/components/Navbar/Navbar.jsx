@@ -37,6 +37,7 @@ function NavBar() {
 							<Nav.Link href='holdings'>Holdings</Nav.Link>
 							<Nav.Link href='createITO'>ITO</Nav.Link>
 							<Nav.Link href='orders'>Orders</Nav.Link>
+							<Nav.Link href='youthtoken'>Buy/Sell Youth Token</Nav.Link>
 							<Nav.Link
 								onClick={() =>
 									logout({
