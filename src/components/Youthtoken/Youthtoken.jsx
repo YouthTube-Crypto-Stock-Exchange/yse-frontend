@@ -18,7 +18,7 @@ const sell = 'Sell Youth Tokens';
 
 const Youthtoken = () => {
 	const [priceOfToken, setPriceOfToken] = useState(0);
-	const [action, setAction] = useState('');
+	const [action, setAction] = useState(buy);
 	const [youthToken, setYouthToken] = useState();
 	const [formErrors, setFormErrors] = useState({});
 	const [message, setMessage] = useState('');
@@ -59,6 +59,7 @@ const Youthtoken = () => {
 						value: youthToken * priceOfToken,
 					});
 					setMessage('');
+					setCurrYt(currYt + youthToken);
 				} catch (err) {
 					setMessage('Some error occurred please try again later');
 					setIsError(true);
@@ -74,6 +75,7 @@ const Youthtoken = () => {
 							from: accounts[0],
 						});
 					setMessage('');
+					setCurrYt(currYt - youthToken);
 				} catch (err) {
 					setMessage('Some error occurred please try again later');
 					setIsError(true);
@@ -81,6 +83,7 @@ const Youthtoken = () => {
 				setIsLoading(false);
 			}
 		}
+		setYouthToken(0);
 	};
 
 	const findFormErrors = () => {
@@ -144,6 +147,7 @@ const Youthtoken = () => {
 							<div key={'inline-radio'} className='my-3'>
 								<Form.Check
 									inline
+									defaultChecked
 									label='Buy Youth Token'
 									name='group1'
 									type='radio'
@@ -156,6 +160,7 @@ const Youthtoken = () => {
 									inline
 									label='Sell Youth Token'
 									name='group1'
+									disabled={currYt === 0}
 									type='radio'
 									id='inline-radio-2'
 									onClick={() => {
@@ -186,7 +191,12 @@ const Youthtoken = () => {
 								</Form.Label>
 								<Form.Control
 									type='number'
-									placeholder='Enter the Number of Youth Tokens'
+									placeholder={
+										'Enter the Number of Youth Tokens' +
+										(action === buy
+											? ' to buy'
+											: ' to sell')
+									}
 									value={youthToken}
 									onChange={event => {
 										setYouthToken(

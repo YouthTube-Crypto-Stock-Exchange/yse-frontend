@@ -12,13 +12,13 @@ const danger = 'danger';
 
 const buy = "Buy Shares";
 const sell = "Sell Shares";
-const aggressive = "Aggresive Bid";
-const normal = "Normal Bid";
+const aggressive = "Aggresive";
+const normal = "Normal";
 
 const Trade = props => {
 	const [influencer, setInfluencer] = useState({});
 
-    const [ action , setAction ] = useState('');
+    const [ action , setAction ] = useState(buy);
     const [ shareCount , setShareCount ] = useState();
     const [ sharePrice , setSharePrice ] = useState();
     const [ bidType , setBidType ] = useState(normal);
@@ -189,6 +189,7 @@ const Trade = props => {
                                     <div key={'inline-radio'} className="my-3">
                                     <Form.Check
                                         inline
+                                        defaultChecked
                                         label="Buy Shares"
                                         name="group1"
                                         type="radio"
@@ -233,7 +234,8 @@ const Trade = props => {
                                     <div key={'inline-radio'} className="my-3">
                                     <Form.Check
                                         inline
-                                        label={normal}
+                                        label={normal + (action === buy ? " Bid" : " Ask")}
+                                        defaultChecked
                                         name="group1"
                                         type="radio"
                                         id='inline-radio-1'
@@ -245,7 +247,7 @@ const Trade = props => {
                                     />
                                     <Form.Check
                                         inline
-                                        label={aggressive}
+                                        label={aggressive + (action === buy ? " Bid" : " Ask")}
                                         name="group1"
                                         type="radio"
                                         id='inline-radio-2'
