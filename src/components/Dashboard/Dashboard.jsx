@@ -123,8 +123,7 @@ const Dashboard = () => {
 											<th>{invTotal}</th>
 											<th>{curTotal}</th>
 											<th>
-												{invTotal -
-													curTotal}
+												{curTotal - invTotal}
 											</th>
 										</tr>
 									</tbody>
